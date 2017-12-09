@@ -1,0 +1,52 @@
+.G1, .G2, .G3, .G4, .G5, .G6, .G7 {
+  background-color: #ebedf0;
+	height: 10px;
+	margin: 6%;
+}
+
+.A1, .A2, .A3, .A4, .A5, .A6, .A7 {
+  background-color: #c6e48b;
+	height: 10px;
+	margin: 6%;
+}
+
+.B1, .B2, .B3, .B4, .B5, .B6, .B7 {
+  background-color: #7bc96f;
+	height: 10px;
+	margin: 6%;
+}
+
+.D1, .D2, .D3, .D4, .D5, .D6, .D7 {
+  background-color: #239a3b;
+	height: 10px;
+	margin: 6%;
+}
+
+.E1, .E2, .E3, .E4, .E5, .E6, .E7 {
+  background-color: #196127;
+	height: 10px;
+	margin: 6%;
+}
+
+.week {
+	position: relative;
+	float: left;
+	width: 10px;
+	/*width: 1.75%;*/
+}
+
+#contribution-graph {
+	margin: auto;
+	padding: 10% 0;
+}
+
+h1 {
+	font-family: sans-serif;
+	margin-top: 5%;
+	margin-bottom: 1%;
+}
+
+#container {
+	width: 530px;
+	margin: auto;
+}

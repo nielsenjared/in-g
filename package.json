@@ -1,0 +1,21 @@
+{
+  "name": "github-scrape",
+  "version": "1.0.0",
+  "description": "Scrape the GitHub",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "Jared Nielsen",
+  "license": "ISC",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.2",
+    "express": "^4.16.2",
+    "howler": "^2.0.5",
+    "nodemon": "^1.12.1",
+    "path": "^0.12.7",
+    "request": "^2.83.0",
+    "tone": "^0.11.11"
+  }
+}

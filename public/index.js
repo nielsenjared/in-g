@@ -1,0 +1,116 @@
+$(function() {
+
+  var synth = new Tone.PolySynth(7, Tone.Synth, {
+    "volume" : -8,
+    "oscillator" : {
+      "partials" : [1, 2, 1],
+    },
+    "portamento" : 0.05
+  }).toMaster()
+
+  //TODO add error handling
+  $("#start-button").on("click", function(event) {
+    event.preventDefault();
+    var username = $("#github-username").val().trim();
+    githubScrape(username);
+      // $( ".selector" ).button( "option", "label", "new text" );
+  });
+
+  $("#stop-button").on("click", function(event) {
+    event.preventDefault();
+    Tone.Transport.stop();
+  });
+
+  function githubScrape(username) {
+    $.get('/scrape/' + username, function(data){
+      buildChords(data);
+      // playScrape(data);
+    });
+
+  } // end gitHubScrape
+
+  // dummy data for testing
+  // var chords = {
+  //   w0: ["#196127", "#239a3b", "#7bc96f", "#c6e48b", "#ebedf0", "#196127", "#ebedf0"],
+  //   w1: ["#ebedf0", "#196127", "#239a3b", "#ebedf0", "#ebedf0", "#196127", "#c6e48b"],
+  //   w2: ["#196127", "#239a3b", "#7bc96f", "#c6e48b", "#ebedf0", "#196127", "#ebedf0"]
+  // }
+
+  // GitHub conribution graph hex chart from most to least: #196127, #239a3b, #7bc96f, #c6e48b, #ebedf0
+  //C, D, E, G, A (https://en.wikipedia.org/wiki/Pentatonic_scale)
+  function buildChords(data) {
+    var chords = [];
+    //TODO https://github.com/Tonejs/Tone.js/wiki/Time
+    var time = 0;
+    for (key in data) {
+      var chord = [];
+      chord.push(time + "i");
+      time+=10;
+      var notes = [];
+      for (var i = 1; i <= data[key].length; i++){
+        if (data[key][i-1] === "#196127") {
+          notes.push(data[key][i-1] = "E" + i);
+        }
+        else if (data[key][i-1] === "#239a3b") {
+          notes.push(data[key][i-1] = "D" + i);
+        }
+        else if (data[key][i-1] === "#7bc96f") {
+          notes.push(data[key][i-1] = "B" + i);
+        }
+        else if (data[key][i-1] === "#c6e48b") {
+          notes.push(data[key][i-1] = "A" + i);
+        }
+        else {
+          notes.push(data[key][i-1] = "G" + i);
+        }
+      }
+      chord.push(notes);
+      chords.push(chord);
+    }
+    playScrape(chords);
+  }// end buildChords
+
+  function playScrape(chords) {
+    var n = '16n';
+    var count = 1;
+    var synthPart = new Tone.Part(function(time, chord){
+      synth.triggerAttackRelease(chord, n, time);
+
+      Tone.Draw.schedule(function(){
+        //the callback synced to the animation frame at the given time
+        if (count <= 53) {
+          renderGraph(chord, count);
+          count++;
+        } else {
+          $("#contribution-graph").empty();
+          count = 1;
+        }
+
+      }, time);
+
+    }, chords).start("0");
+
+    synthPart.loop = true;
+    // synthPart.loopEnd = "0m";
+    synthPart.humanize = false;
+
+    Tone.Transport.bpm.value = 10;
+    Tone.Transport.start("+0.1");
+  } // end playScrape
+  //TODO https://github.com/Tonejs/Tone.js/wiki/Arpeggiator
+
+  function renderGraph(chord) {
+
+    var sun = $("<div>&nbsp;</div>").attr("class", chord[0]);
+    var mon = $("<div>&nbsp;</div>").attr("class", chord[1]);
+    var tue = $("<div>&nbsp;</div>").attr("class", chord[2]);
+    var wed = $("<div>&nbsp;</div>").attr("class", chord[3]);
+    var thu = $("<div>&nbsp;</div>").attr("class", chord[4]);
+    var fri = $("<div>&nbsp;</div>").attr("class", chord[5]);
+    var sat = $("<div>&nbsp;</div>").attr("class", chord[6]);
+
+    var week = $("<div>").attr("class", "week").append(sun, mon, tue, wed, thu, fri, sat);
+    $("#contribution-graph").append(week);
+
+  }
+});
