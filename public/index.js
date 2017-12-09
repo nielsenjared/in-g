@@ -24,6 +24,7 @@ $(function() {
   $("#stop-button").on("click", function(event) {
     event.preventDefault();
     Tone.Transport.pause();
+    state = false;
   });
 
   function githubScrape(username) {
