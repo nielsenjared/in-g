@@ -35,7 +35,6 @@ app.get("/scrape/:username", function(req, res) {
         $(element).children().eq(6).attr("fill")
       ]
     });
-    console.log("\n*******************************");
     return res.json(data);
   })
 

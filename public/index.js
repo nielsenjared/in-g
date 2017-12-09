@@ -1,5 +1,6 @@
 $(function() {
   var state = false;
+  var username;
   var synth = new Tone.PolySynth(7, Tone.Synth, {
     "volume" : -8,
     "oscillator" : {
@@ -11,12 +12,15 @@ $(function() {
   //TODO add error handling if not valid GitHub account
   $("#start-button").on("click", function(event) {
     event.preventDefault();
-    var username = $("#github-username").val().trim();
-    if (!state) {
+    if (typeof username === 'undefined') {
+      username = $("#github-username").val().trim();
+      state = true;
       githubScrape(username);
+    } else if (!state) {
+      Tone.Transport.start();
       state = true;
     } else {
-      Tone.Transport.start();
+      console.log("Tone!");
     }
     //TODO add conditional for entering new username
   });
@@ -67,6 +71,7 @@ $(function() {
     playScrape(chords);
   }// end buildChords
 
+  //TODO read up https://tonejs.github.io/docs/r11/Part
   function playScrape(chords) {
     var n = '16n';
     var synthPart = new Tone.Part(function(time, chord){
