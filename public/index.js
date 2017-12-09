@@ -17,12 +17,18 @@ $(function() {
       state = true;
       githubScrape(username);
     } else if (!state) {
-      Tone.Transport.start();
+      var newuser = $("#github-username").val().trim();
+      if (newuser != username) {
+        username = newuser;
+        console.log("newuser");
+        //TODO find Tone.js method for removing/clearing Transport or Part
+        // githubScrape(username);
+      }
       state = true;
+      Tone.Transport.start();
     } else {
       console.log("Tone!");
     }
-    //TODO add conditional for entering new username
   });
 
   $("#stop-button").on("click", function(event) {
@@ -71,7 +77,7 @@ $(function() {
     playScrape(chords);
   }// end buildChords
 
-  //TODO read up https://tonejs.github.io/docs/r11/Part
+  //TODO read up for better handling of Draw https://tonejs.github.io/docs/r11/Part
   function playScrape(chords) {
     var n = '16n';
     var synthPart = new Tone.Part(function(time, chord){
