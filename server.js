@@ -36,7 +36,6 @@ app.get("/scrape/:username", function(req, res) {
       ]
     });
     console.log("\n*******************************");
-    console.log(data);
     return res.json(data);
   })
 

@@ -1,7 +1,7 @@
 {
   "name": "in-g",
   "version": "1.0.0",
-  "description": "Scraper plays GitHub user contribution graphs as ionic chords.",
+  "description": "GitHub user contribution graphs as pentatonic chords in the key of G.",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

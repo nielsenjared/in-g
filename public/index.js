@@ -1,5 +1,5 @@
 $(function() {
-
+  var state = false;
   var synth = new Tone.PolySynth(7, Tone.Synth, {
     "volume" : -8,
     "oscillator" : {
@@ -8,35 +8,30 @@ $(function() {
     "portamento" : 0.05
   }).toMaster()
 
-  //TODO add error handling
+  //TODO add error handling if not valid GitHub account
   $("#start-button").on("click", function(event) {
     event.preventDefault();
     var username = $("#github-username").val().trim();
-    githubScrape(username);
-      // $( ".selector" ).button( "option", "label", "new text" );
+    if (!state) {
+      githubScrape(username);
+      state = true;
+    }
+    //TODO add conditional for entering new username
+    Tone.Transport.start();
   });
 
   $("#stop-button").on("click", function(event) {
     event.preventDefault();
-    Tone.Transport.stop();
+    Tone.Transport.pause();
   });
 
   function githubScrape(username) {
     $.get('/scrape/' + username, function(data){
       buildChords(data);
-      // playScrape(data);
     });
-
   } // end gitHubScrape
 
-  // dummy data for testing
-  // var chords = {
-  //   w0: ["#196127", "#239a3b", "#7bc96f", "#c6e48b", "#ebedf0", "#196127", "#ebedf0"],
-  //   w1: ["#ebedf0", "#196127", "#239a3b", "#ebedf0", "#ebedf0", "#196127", "#c6e48b"],
-  //   w2: ["#196127", "#239a3b", "#7bc96f", "#c6e48b", "#ebedf0", "#196127", "#ebedf0"]
-  // }
-
-  // GitHub conribution graph hex chart from most to least: #196127, #239a3b, #7bc96f, #c6e48b, #ebedf0
+  //GitHub graph hex vals, most to least: #196127, #239a3b, #7bc96f, #c6e48b, #ebedf0
   //C, D, E, G, A (https://en.wikipedia.org/wiki/Pentatonic_scale)
   function buildChords(data) {
     var chords = [];
@@ -72,22 +67,16 @@ $(function() {
 
   function playScrape(chords) {
     var n = '16n';
-    var count = 1;
+    var count = 0;
     var synthPart = new Tone.Part(function(time, chord){
       synth.triggerAttackRelease(chord, n, time);
 
       Tone.Draw.schedule(function(){
-        //the callback synced to the animation frame at the given time
-        if (count <= 53) {
-          renderGraph(chord, count);
-          count++;
-        } else {
+        if (chord == chords[0][1]) {
           $("#contribution-graph").empty();
-          count = 1;
         }
-
+        renderGraph(chord);
       }, time);
-
     }, chords).start("0");
 
     synthPart.loop = true;
