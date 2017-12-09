@@ -15,9 +15,10 @@ $(function() {
     if (!state) {
       githubScrape(username);
       state = true;
+    } else {
+      Tone.Transport.start();
     }
     //TODO add conditional for entering new username
-    Tone.Transport.start();
   });
 
   $("#stop-button").on("click", function(event) {
@@ -67,15 +68,14 @@ $(function() {
 
   function playScrape(chords) {
     var n = '16n';
-    var count = 0;
     var synthPart = new Tone.Part(function(time, chord){
       synth.triggerAttackRelease(chord, n, time);
 
       Tone.Draw.schedule(function(){
+        renderGraph(chord);
         if (chord == chords[0][1]) {
           $("#contribution-graph").empty();
         }
-        renderGraph(chord);
       }, time);
     }, chords).start("0");
 
