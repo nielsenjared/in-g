@@ -21,7 +21,7 @@ $(function() {
       if (newuser != username) {
         username = newuser;
         console.log("newuser");
-        //TODO find Tone.js method for removing/clearing Transport or Part
+        //TODO Tone.js method for removing/clearing Transport or Part
         // githubScrape(username);
       }
       state = true;
@@ -110,7 +110,7 @@ $(function() {
     var fri = $("<div>&nbsp;</div>").attr("class", chord[5]);
     var sat = $("<div>&nbsp;</div>").attr("class", chord[6]);
 
-    var week = $("<div>").attr("class", "week").append(sun, mon, tue, wed, thu, fri, sat);
+    var week = $("<div>").addClass("animated pulse week").append(sun, mon, tue, wed, thu, fri, sat);
     $("#contribution-graph").append(week);
 
   }
