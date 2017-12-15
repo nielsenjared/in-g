@@ -17,7 +17,15 @@ $(function() {
       username = $("#github-username").val().trim();
       githubScrape(username);
       state = true;
-    } else if (state) {
+    } else if (username && !state) {
+      var newuser = $("#github-username").val().trim();
+      if (newuser != username) {
+        username = newuser;
+        console.log("newuser");
+        // synthPart.dispose();
+        githubScrape(username);
+      }
+    } else if (username && state) {
       var newuser = $("#github-username").val().trim();
       if (newuser != username) {
         username = newuser;
@@ -38,7 +46,13 @@ $(function() {
 
   function githubScrape(username) {
     $.get('/scrape/' + username, function(data){
-      buildChords(data);
+      if (jQuery.isEmptyObject(data)) {
+        $("#contribution-graph").text("Not a valid GitHub username");
+        state = false;
+      } else {
+        $("#contribution-graph").empty();
+        buildChords(data);
+      }
     });
   } // end gitHubScrape
 

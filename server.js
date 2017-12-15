@@ -19,7 +19,12 @@ app.get("/scrape/:username", function(req, res) {
 
   request(url, function(error, response, html) {
     var data = {};
-    var $ = cheerio.load(html);
+    // var $ = cheerio.load(html);
+    try {
+      var $ = cheerio.load(html)
+    } catch (e) {
+      console.log("cheerio err"); // TODO handle error
+    }
 
     // $("rect.day").each(function(i, element) {
     $("g g").each(function(i, element) {
