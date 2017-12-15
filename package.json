@@ -10,7 +10,6 @@
   "author": "Jared Nielsen",
   "license": "GPL-3.0",
   "dependencies": {
-    "bounce.js": "^0.8.2",
     "cheerio": "^1.0.0-rc.2",
     "express": "^4.16.2",
     "nodemon": "^1.12.1",
