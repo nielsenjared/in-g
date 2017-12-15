@@ -50,3 +50,8 @@ h1 {
 	width: 530px;
 	margin: auto;
 }
+
+div.about {
+	text-align: right;
+	padding-right: 2%;
+}

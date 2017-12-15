@@ -1,6 +1,7 @@
 $(function() {
   var state = false;
   var username;
+  var synthPart;
   var synth = new Tone.PolySynth(7, Tone.Synth, {
     "volume" : -8,
     "oscillator" : {
@@ -14,18 +15,16 @@ $(function() {
     event.preventDefault();
     if (typeof username === 'undefined') {
       username = $("#github-username").val().trim();
-      state = true;
       githubScrape(username);
-    } else if (!state) {
+      state = true;
+    } else if (state) {
       var newuser = $("#github-username").val().trim();
       if (newuser != username) {
         username = newuser;
         console.log("newuser");
-        //TODO Tone.js method for removing/clearing Transport or Part
-        // githubScrape(username);
+        synthPart.dispose();
+        githubScrape(username);
       }
-      state = true;
-      Tone.Transport.start();
     } else {
       console.log("Tone!");
     }
@@ -77,10 +76,10 @@ $(function() {
     playScrape(chords);
   }// end buildChords
 
-  //TODO read up for better handling of Draw https://tonejs.github.io/docs/r11/Part
+  //TODO read up on better handling of Draw https://tonejs.github.io/docs/r11/Part
   function playScrape(chords) {
     var n = '16n';
-    var synthPart = new Tone.Part(function(time, chord){
+    synthPart = new Tone.Part(function(time, chord){
       synth.triggerAttackRelease(chord, n, time);
 
       Tone.Draw.schedule(function(){
@@ -92,7 +91,6 @@ $(function() {
     }, chords).start("0");
 
     synthPart.loop = true;
-    // synthPart.loopEnd = "0m";
     synthPart.humanize = false;
 
     Tone.Transport.bpm.value = 10;
