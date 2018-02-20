@@ -26,19 +26,11 @@ app.get("/scrape/:username", function(req, res) {
       console.log("cheerio err"); // TODO handle error
     }
 
-    // $("rect.day").each(function(i, element) {
     $("g g").each(function(i, element) {
-
-      data['w' + i] = [
-        // TODO push to array rather than object
-        $(element).children().eq(0).attr("fill"),
-        $(element).children().eq(1).attr("fill"),
-        $(element).children().eq(2).attr("fill"),
-        $(element).children().eq(3).attr("fill"),
-        $(element).children().eq(4).attr("fill"),
-        $(element).children().eq(5).attr("fill"),
-        $(element).children().eq(6).attr("fill")
-      ]
+      data['w' + i] = [];
+      for (var j = 0; j < $(element).children().length; j++){
+        data['w' + i].push($(element).children().eq(j).attr("fill"));
+      }
     });
     return res.json(data);
   })
