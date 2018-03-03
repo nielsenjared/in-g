@@ -22,7 +22,7 @@ $(function() {
       if (newuser != username) {
         username = newuser;
         console.log("newuser");
-        // synthPart.dispose();
+        synthPart.dispose();
         githubScrape(username);
       }
     } else if (username && state) {
@@ -101,6 +101,7 @@ $(function() {
         if (chord == chords[0][1]) {
           $("#contribution-graph").empty();
         }
+
       }, time);
     }, chords).start("0");
 
