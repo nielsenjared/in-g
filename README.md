@@ -1,10 +1,7 @@
 # In G
+GitHub user contribution graphs as pentatonic chords in the key of G. https://in-g.herokuapp.com/
 
 ![](./jared-nielsen-in-g.png)
-
-GitHub user contribution graphs as pentatonic chords in the key of G.
-
-https://in-g.herokuapp.com/
 
 One of my favorite ‘albums’ for getting in the zone is Terry Riley’s [_In C_](https://en.wikipedia.org/wiki/In_C). It’s one of the earliest and best known pieces of minimal music. Over the holidays I was stranded in the Jacksonville airport due to weather-related flight delays. I hacked most of this together in the airport bar. Here’s a brief run-down of the app. I recommend listening to the inspiration while reading this tutorial...
 
