@@ -3,9 +3,7 @@ GitHub user contribution graphs as pentatonic chords in the key of G. https://in
 
 ![](./jared-nielsen-in-g.png)
 
-One of my favorite ‘albums’ for getting in the zone is Terry Riley’s [_In C_](https://en.wikipedia.org/wiki/In_C). It’s one of the earliest and best known pieces of minimal music. Over the holidays I was stranded in the Jacksonville airport due to weather-related flight delays. I hacked most of this together in the airport bar. Here’s a brief run-down of the app. I recommend listening to the inspiration while reading this tutorial...
-
-<iframe width="560" height="315" src="https://www.youtube.com/embed/XRaa34E8tXQ" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+One of my favorite ‘albums’ for getting in the zone is Terry Riley’s [_In C_](https://en.wikipedia.org/wiki/In_C). It’s one of the earliest and best known pieces of minimal music. Over the holidays I was stranded in the Jacksonville airport due to weather-related flight delays. I hacked most of this together in the airport bar. Here’s a brief run-down of the app. I recommend [listening to the inspiration while reading this tutorial...](https://youtu.be/XRaa34E8tXQ)
 
 GitHub user contribution graphs look a lot like digital audio sequencers, so why not play them like music? There are five hex values associated with GitHub contribution graphs, so I based the audio on a pentatonic scale in the key of G. (GABDE, or do re mi so la). Each day of the week is an octave, with Sunday the highest pitch and Saturday the lowest.
 
