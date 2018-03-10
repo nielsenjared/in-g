@@ -7,13 +7,13 @@ One of my favorite ‘albums’ for getting in the zone is Terry Riley’s [_In 
 
 GitHub user contribution graphs look a lot like digital audio sequencers, so why not play them like music? There are five hex values associated with GitHub contribution graphs, so I based the audio on a pentatonic scale in the key of G. (GABDE, or do re mi so la). Each day of the week is an octave, with Sunday the highest pitch and Saturday the lowest.
 
-GitHub has a well-documented API, but I could not find a straightforward means of getting a user’s contribution graph using it.
+GitHub has a well-documented API, but I could not find a straightforward means of accessing a user’s contribution graph using it.
 
 Let’s scrape it!
 
 ## Server Side
 
-For the purposes of this tutorial I am going to assume you have an understanding of Node do not have either experience with web scraping or web audio. If you are new to Node, you can download and install it here https://nodejs.org/en/ There are countless tutorials to get you started.
+For the purposes of this tutorial I am going to assume you have an understanding of Node but do not have either experience with web scraping or web audio. If you are new to Node, you can download and install it here https://nodejs.org/en/ There are countless tutorials to get you started. I recommend [MDN](https://developer.mozilla.org/en-US/docs/Learn/Server-side/Express_Nodejs).
 
 Using our browser’s Inspect tools, we can see that a GitHub user graph is rendered in an `<svg>` element containing nested `<g>` elements containing `<rect>` elements. Notice there are seven `<rect>` elements and each has a corresponding `data-date` attribute. This is each week rendered as rectangles in a column, beginning with Sunday and ending with Saturday. What we want to scrape is the `fill` attribute associated with each `<rect>`.
 
@@ -83,7 +83,7 @@ You should get something similar to this:
   'data-date': '2017-02-19' }
 ```
 
-For me, at the time of this writing, this is the first rectangle in my graph. That’s great. We got one rect. But what we want is all 365 or so of them. Because we loaded Cheerio into the $ selector, we have access to all of its built-in methods. We want to use [.each()] (https://github.com/cheeriojs/cheerio#each-functionindex-element-)
+For me, at the time of this writing, this is the first rectangle in my graph. That’s great. We got one rect. But what we want is all 365 or so of them. Because we loaded Cheerio into the $ selector, we have access to all of its built-in methods. We want to use [.each()](https://github.com/cheeriojs/cheerio#each-functionindex-element-)
 
 If we read the fantastic manual, we find this example:
 ```js
@@ -120,7 +120,7 @@ $('rect').each(function(i, elem){
   });
 ```
 
-Now we need to do something with this data. If our goal is to play each week as a “chord” then we want our dataset to reflect the weekly structure of the graph. There are a number of ways we could approach this. We saw in the documentation above the declaration of a fruits array to which each `<li>` element was being added by index. We could take that approach and then slice the array into subarrays for every seven items. Or we could scrape the data directly into an object.
+Now we need to do something with this data. If our goal is to play each week as a “chord” then we want our dataset to reflect the weekly structure of the graph. There are a number of ways we could approach this. We saw in the documentation above the declaration of a fruits array to which each `<li>` element was being added by index. We could take that approach and then slice the array into subarrays for every seven items. Or we could scrape the data directly into an object by week.
 
 If you recall, our HTML element architecture looks like this:
 ```html
@@ -231,9 +231,7 @@ Kill the server as we won't need it while we play with Tone.js.
 
 ## Client Side
 
-To use Tone.js client-side, you will need to download and add the library to your app: https://github.com/Tonejs/Tone.js#installation
-
-Download and add [this file](https://tonejs.github.io/build/Tone.min.js) to your project directory.
+To use Tone.js client-side, you will need to download and add the library to your app. Download and add [this file](https://tonejs.github.io/build/Tone.min.js) to your project directory.
 
 Create an `index.html` file with boilerplate HTML and add Tone.js to the `<head>`.
 
@@ -294,225 +292,225 @@ var part = new Tone.Part(function(time, note){
 
 ```js
 var synth = new Tone.PolySynth(3, Tone.Synth, {
-			"oscillator" : {
-				"type" : "fatsawtooth",
-				"count" : 3,
-				"spread" : 30
-			},
-			"envelope": {
-				"attack": 0.01,
-				"decay": 0.1,
-				"sustain": 0.5,
-				"release": 0.4,
-				"attackCurve" : "exponential"
-			},
-		}).toMaster();
+	"oscillator" : {
+		"type" : "fatsawtooth",
+		"count" : 3,
+		"spread" : 30
+	},
+	"envelope": {
+		"attack": 0.01,
+		"decay": 0.1,
+		"sustain": 0.5,
+		"release": 0.4,
+		"attackCurve" : "exponential"
+	},
+}).toMaster();
 
-    var part = new Tone.Part(function(time, note){
-			synth.triggerAttackRelease(note.noteName, note.duration, time, note.velocity);
-		}, [
-			{
-				"time": "192i",
-				"noteName": "G4",
-				"velocity": 0.8110236220472441,
-				"duration": "104i"
-			},
-			{
-				"time": "192i",
-				"noteName": "B4",
-				"velocity": 0.7874015748031497,
-				"duration": "104i"
-			},
-			{
-				"time": "192i",
-				"noteName": "D5",
-				"velocity": 0.8031496062992126,
-				"duration": "104i"
-			},
-			{
-				"time": "480i",
-				"noteName": "G4",
-				"velocity": 0.7559055118110236,
-				"duration": "104i"
-			},
-			{
-				"time": "480i",
-				"noteName": "C5",
-				"velocity": 0.6850393700787402,
-				"duration": "104i"
-			},
-			{
-				"time": "480i",
-				"noteName": "E5",
-				"velocity": 0.6771653543307087,
-				"duration": "104i"
-			},
-			{
-				"time": "768i",
-				"noteName": "F4",
-				"velocity": 0.8661417322834646,
-				"duration": "104i"
-			},
-			{
-				"time": "768i",
-				"noteName": "A4",
-				"velocity": 0.8346456692913385,
-				"duration": "104i"
-			},
-			{
-				"time": "768i",
-				"noteName": "C5",
-				"velocity": 0.8188976377952756,
-				"duration": "104i"
-			},
-			{
-				"time": "1056i",
-				"noteName": "F4",
-				"velocity": 0.7007874015748031,
-				"duration": "104i"
-			},
-			{
-				"time": "1056i",
-				"noteName": "A4",
-				"velocity": 0.6850393700787402,
-				"duration": "104i"
-			},
-			{
-				"time": "1056i",
-				"noteName": "C5",
-				"velocity": 0.6614173228346457,
-				"duration": "104i"
-			},
-			{
-				"time": "1248i",
-				"noteName": "G4",
-				"velocity": 0.6771653543307087,
-				"duration": "104i"
-			},
-			{
-				"time": "1248i",
-				"noteName": "B4",
-				"velocity": 0.6771653543307087,
-				"duration": "104i"
-			},
-			{
-				"time": "1248i",
-				"noteName": "D5",
-				"velocity": 0.7165354330708661,
-				"duration": "104i"
-			},
-			{
-				"time": "1440i",
-				"noteName": "G4",
-				"velocity": 0.8818897637795275,
-				"duration": "248i"
-			},
-			{
-				"time": "1440i",
-				"noteName": "B4",
-				"velocity": 0.84251968503937,
-				"duration": "248i"
-			},
-			{
-				"time": "1440i",
-				"noteName": "D5",
-				"velocity": 0.8818897637795275,
-				"duration": "248i"
-			},
-			{
-				"time": "1728i",
-				"noteName": "G4",
-				"velocity": 0.8267716535433071,
-				"duration": "104i"
-			},
-			{
-				"time": "1728i",
-				"noteName": "C5",
-				"velocity": 0.8031496062992126,
-				"duration": "104i"
-			},
-			{
-				"time": "1728i",
-				"noteName": "E5",
-				"velocity": 0.8188976377952756,
-				"duration": "104i"
-			},
-			{
-				"time": "2016i",
-				"noteName": "F4",
-				"velocity": 0.7086614173228346,
-				"duration": "104i"
-			},
-			{
-				"time": "2016i",
-				"noteName": "A4",
-				"velocity": 0.7244094488188977,
-				"duration": "104i"
-			},
-			{
-				"time": "2016i",
-				"noteName": "C5",
-				"velocity": 0.7007874015748031,
-				"duration": "104i"
-			},
-			{
-				"time": "2208i",
-				"noteName": "C4",
-				"velocity": 0.9921259842519685,
-				"duration": "296i"
-			},
-			{
-				"time": "2208i",
-				"noteName": "F4",
-				"velocity": 0.968503937007874,
-				"duration": "200i"
-			},
-			{
-				"time": "2208i",
-				"noteName": "A4",
-				"velocity": 0.9606299212598425,
-				"duration": "208i"
-			},
-			{
-				"time": "2400i",
-				"noteName": "E4",
-				"velocity": 0.7559055118110236,
-				"duration": "104i"
-			},
-			{
-				"time": "2400i",
-				"noteName": "G4",
-				"velocity": 0.7007874015748031,
-				"duration": "104i"
-			},
-			{
-				"time": "2592i",
-				"noteName": "C4",
-				"velocity": 0.968503937007874,
-				"duration": "488i"
-			},
-			{
-				"time": "2592i",
-				"noteName": "D4",
-				"velocity": 0.9448818897637795,
-				"duration": "488i"
-			},
-			{
-				"time": "2592i",
-				"noteName": "G4",
-				"velocity": 0.937007874015748,
-				"duration": "488i"
-			}
-	]).start(0);
-	part.loop = true;
-	part.loopEnd = "4m";
-	Tone.Transport.bpm.value = 132;
+  var part = new Tone.Part(function(time, note){
+		synth.triggerAttackRelease(note.noteName, note.duration, time, note.velocity);
+	}, [
+		{
+			"time": "192i",
+			"noteName": "G4",
+			"velocity": 0.8110236220472441,
+			"duration": "104i"
+		},
+		{
+			"time": "192i",
+			"noteName": "B4",
+			"velocity": 0.7874015748031497,
+			"duration": "104i"
+		},
+		{
+			"time": "192i",
+			"noteName": "D5",
+			"velocity": 0.8031496062992126,
+			"duration": "104i"
+		},
+		{
+			"time": "480i",
+			"noteName": "G4",
+			"velocity": 0.7559055118110236,
+			"duration": "104i"
+		},
+		{
+			"time": "480i",
+			"noteName": "C5",
+			"velocity": 0.6850393700787402,
+			"duration": "104i"
+		},
+		{
+			"time": "480i",
+			"noteName": "E5",
+			"velocity": 0.6771653543307087,
+			"duration": "104i"
+		},
+		{
+			"time": "768i",
+			"noteName": "F4",
+			"velocity": 0.8661417322834646,
+			"duration": "104i"
+		},
+		{
+			"time": "768i",
+			"noteName": "A4",
+			"velocity": 0.8346456692913385,
+			"duration": "104i"
+		},
+		{
+			"time": "768i",
+			"noteName": "C5",
+			"velocity": 0.8188976377952756,
+			"duration": "104i"
+		},
+		{
+			"time": "1056i",
+			"noteName": "F4",
+			"velocity": 0.7007874015748031,
+			"duration": "104i"
+		},
+		{
+			"time": "1056i",
+			"noteName": "A4",
+			"velocity": 0.6850393700787402,
+			"duration": "104i"
+		},
+		{
+			"time": "1056i",
+			"noteName": "C5",
+			"velocity": 0.6614173228346457,
+			"duration": "104i"
+		},
+		{
+			"time": "1248i",
+			"noteName": "G4",
+			"velocity": 0.6771653543307087,
+			"duration": "104i"
+		},
+		{
+			"time": "1248i",
+			"noteName": "B4",
+			"velocity": 0.6771653543307087,
+			"duration": "104i"
+		},
+		{
+			"time": "1248i",
+			"noteName": "D5",
+			"velocity": 0.7165354330708661,
+			"duration": "104i"
+		},
+		{
+			"time": "1440i",
+			"noteName": "G4",
+			"velocity": 0.8818897637795275,
+			"duration": "248i"
+		},
+		{
+			"time": "1440i",
+			"noteName": "B4",
+			"velocity": 0.84251968503937,
+			"duration": "248i"
+		},
+		{
+			"time": "1440i",
+			"noteName": "D5",
+			"velocity": 0.8818897637795275,
+			"duration": "248i"
+		},
+		{
+			"time": "1728i",
+			"noteName": "G4",
+			"velocity": 0.8267716535433071,
+			"duration": "104i"
+		},
+		{
+			"time": "1728i",
+			"noteName": "C5",
+			"velocity": 0.8031496062992126,
+			"duration": "104i"
+		},
+		{
+			"time": "1728i",
+			"noteName": "E5",
+			"velocity": 0.8188976377952756,
+			"duration": "104i"
+		},
+		{
+			"time": "2016i",
+			"noteName": "F4",
+			"velocity": 0.7086614173228346,
+			"duration": "104i"
+		},
+		{
+			"time": "2016i",
+			"noteName": "A4",
+			"velocity": 0.7244094488188977,
+			"duration": "104i"
+		},
+		{
+			"time": "2016i",
+			"noteName": "C5",
+			"velocity": 0.7007874015748031,
+			"duration": "104i"
+		},
+		{
+			"time": "2208i",
+			"noteName": "C4",
+			"velocity": 0.9921259842519685,
+			"duration": "296i"
+		},
+		{
+			"time": "2208i",
+			"noteName": "F4",
+			"velocity": 0.968503937007874,
+			"duration": "200i"
+		},
+		{
+			"time": "2208i",
+			"noteName": "A4",
+			"velocity": 0.9606299212598425,
+			"duration": "208i"
+		},
+		{
+			"time": "2400i",
+			"noteName": "E4",
+			"velocity": 0.7559055118110236,
+			"duration": "104i"
+		},
+		{
+			"time": "2400i",
+			"noteName": "G4",
+			"velocity": 0.7007874015748031,
+			"duration": "104i"
+		},
+		{
+			"time": "2592i",
+			"noteName": "C4",
+			"velocity": 0.968503937007874,
+			"duration": "488i"
+		},
+		{
+			"time": "2592i",
+			"noteName": "D4",
+			"velocity": 0.9448818897637795,
+			"duration": "488i"
+		},
+		{
+			"time": "2592i",
+			"noteName": "G4",
+			"velocity": 0.937007874015748,
+			"duration": "488i"
+		}
+]).start(0);
+part.loop = true;
+part.loopEnd = "4m";
+Tone.Transport.bpm.value = 132;
 
-  //pulled this out of the Interface.Button to autoplay on page load
-  Tone.Transport.start("+0.1");
-	```
+//pulled this out of the Interface.Button to autoplay on page load
+Tone.Transport.start("+0.1");
+```
 
-  From this example we see that we initialize a new Tone.PolySynth `synth` and then initialize `part` as a new Tone.Part. Within Tone.Part we invoke `synth.triggerAttackRelease` and pass `part` an array of objects containing the _Jump_ chord progression. Let's simplify this so we can see what's happening:
+From this example we see that we initialize a new Tone.PolySynth `synth` and then initialize `part` as a new Tone.Part. Within Tone.Part we invoke `synth.triggerAttackRelease` and pass `part` an array of objects containing the _Jump_ chord progression. Let's simplify this so we can see what's happening:
 ```js
 var chords = [
   {
@@ -710,36 +708,36 @@ var chords = [
 ];
 
 var synth = new Tone.PolySynth(3, Tone.Synth, {
-      "oscillator" : {
-        "type" : "fatsawtooth",
-        "count" : 3,
-        "spread" : 30
-      },
-      "envelope": {
-        "attack": 0.01,
-        "decay": 0.1,
-        "sustain": 0.5,
-        "release": 0.4,
-        "attackCurve" : "exponential"
-      },
-    }).toMaster();
+  "oscillator" : {
+    "type" : "fatsawtooth",
+    "count" : 3,
+    "spread" : 30
+  },
+  "envelope": {
+    "attack": 0.01,
+    "decay": 0.1,
+    "sustain": 0.5,
+    "release": 0.4,
+    "attackCurve" : "exponential"
+  },
+}).toMaster();
 
-    var part = new Tone.Part(function(time, note){
-      synth.triggerAttackRelease(note.noteName, note.duration, time, note.velocity);
-    }, chords).start(0);
+var part = new Tone.Part(function(time, note){
+  synth.triggerAttackRelease(note.noteName, note.duration, time, note.velocity);
+}, chords).start(0);
 
-    part.loop = true;
-    part.loopEnd = "4m";
-    Tone.Transport.bpm.value = 132;
+part.loop = true;
+part.loopEnd = "4m";
+Tone.Transport.bpm.value = 132;
 
-    //
-    Tone.Transport.start("+0.1");
+//
+Tone.Transport.start("+0.1");
 ```
 
 I moved our chords into a variable `chords` and then passed it to Tone.Part as its second argument, after the callback. If we [refer back to the docs](https://tonejs.github.io/docs/r11/Part) we see that basic usage looks like this:
-`new Tone.Part ( callback , events )`
+`new Tone.Part ( callback , events )` Where the callback is what we want to invoke on each event and each event is passed in as an element in an array.
 
-Where the callback is what we want to invoke on each event and each event is passed in as an element in an array. If you're new to Node or still find callbacks confusing, we can further refactor the Jump example by declaring the callback as a named function.
+If you're new to Node or still find callbacks confusing, we can further refactor the Jump example by declaring the callback as a named function.
 
 ```js
 function callback(time, note){
@@ -771,7 +769,7 @@ function callback(time, note){
 ```
 
 ## Front && Back
-Now all we need to do is connect the backend scraper to the front-end. We need our server running to do so, so fire it up:
+Now all we need to do is connect the backend scraper to the front-end. We need our server running to do so, so fire it up. If you're not using it, I recommend [nodemon](https://www.npmjs.com/package/nodemon):
 `nodemon server.js`
 
 Here's some starter HTML and jQuery to expedite the process (note that you will need to create a `public` directory and move the Tone file into it so Express can serve static files):
